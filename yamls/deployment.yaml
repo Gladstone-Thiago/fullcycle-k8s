@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goserver
+  labels:
+    app: goserver
+spec:
+  selector:
+    matchLabels:
+      app: goserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "goserver"
+    spec:
+      containers:
+        - name: goserver
+          image: "gladstonethiago/hello-go:v7"
+          envFrom:
+            - configMapRef:
+                name: goserver-env
+
+          volumeMounts:
+            - mountPath: /go/myfamily
+              name: config
+      volumes:
+        - name: config
+          configMap:
+            name: configmap-family
+            item:
+              - key: members
+                path: family.txt
