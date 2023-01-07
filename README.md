@@ -76,3 +76,13 @@
     kubectl get pod
     kubectl exec -it goserver-5b789d8857-ml92n --bash
     echo $
+
+    Healthz
+    docker build -t gladstonethiago/hello-go:v5.3 .
+    docker push gladstonethiago/hello-go:v5.3
+    kubectl apply -f deployment.yaml
+    kubectl port-forward svc/goserver-service 8000:80
+
+    liveness Probe
+    kubectl delete deploy goserver
+    kubectl apply -f deployment.yaml && watch -n1 kubectl get pods
