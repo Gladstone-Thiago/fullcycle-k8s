@@ -86,3 +86,7 @@
     liveness Probe
     kubectl delete deploy goserver
     kubectl apply -f deployment.yaml && watch -n1 kubectl get pods
+
+    Raadiness
+    docker build -t gladstonethiago/hello-go:v5.4 .
+    docker push gladstonethiago/hello-go:v5.4
