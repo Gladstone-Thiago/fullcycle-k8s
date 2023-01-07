@@ -1,9 +1,9 @@
-FROM golang:1.15-buster as builder
+FROM golang:1.15-alpine as builder
 WORKDIR /app
 COPY server.go ./
 RUN go build -o /server server.go
 
-FROM scratch
+FROM alpine
 WORKDIR /
-COPY --from=builder /server /server
+COPY --from=builder /. /.
 CMD [ "./server" ]

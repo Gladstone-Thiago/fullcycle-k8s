@@ -16,18 +16,21 @@ spec:
     spec:
       containers:
         - name: goserver
-          image: "gladstonethiago/hello-go:v7"
+          image: "gladstonethiago/hello-go:v5.2"
           envFrom:
             - configMapRef:
                 name: goserver-env
-
+            - secretRef:
+                name: goserver-secret
+        
           volumeMounts:
-            - mountPath: /go/myfamily
+            - mountPath: "/go/myfamily"
               name: config
+
       volumes:
-        - name: config
+        - name: config 
           configMap:
             name: configmap-family
-            item:
+            items:
               - key: members
-                path: family.txt
+                path: "family.txt"

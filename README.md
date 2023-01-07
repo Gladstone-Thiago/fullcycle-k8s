@@ -59,3 +59,20 @@
 
 
      kubectl apply -f configmap-family.yaml
+     kubectl apply -f deployment.yaml
+
+     kubectl logs goserver-5f85c5bccf-7d25p (log pod)
+
+    docker build -t gladstonethiago/hello-go:v5.2 .
+    docker push gladstonethiago/hello-go:v5.2
+
+    echo "thiago" | base64 dGhpYWdvCg==
+    echo "123456" | base64 MTIzNDU2Cg==
+
+    kubectl apply -f secret.yaml
+    kubectl apply -f deployment.yaml
+
+    kubectl port-forward svc/goserver-service 8000:80
+    kubectl get pod
+    kubectl exec -it goserver-5b789d8857-ml92n --bash
+    echo $
