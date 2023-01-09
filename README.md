@@ -90,3 +90,25 @@
     Raadiness
     docker build -t gladstonethiago/hello-go:v5.4 .
     docker push gladstonethiago/hello-go:v5.4
+    kubectl delete deploy goserver
+    kubectl apply -f deployment.yaml && watch -n1 kubectl get pods
+
+    docker build -t gladstonethiago/hello-go:v5.5 .
+    docker push gladstonethiago/hello-go:v5.5
+
+    Startup Probe
+    docker build -t gladstonethiago/hello-go:v5.6 .
+    docker push gladstonethiago/hello-go:v5.6
+    kubectl apply -f deployment.yaml && watch -n1 kubectl get pods
+
+    RESOURCES AND HPA
+        Metrics server
+        wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+        kubectl apply -f metrics-server.yaml
+        kubectl get apiservices
+        kubectl get pod
+        kubectl top pod goserver-8f7bf6784-pvn7s
+        kubectl apply -f hpa.yaml
+
+        Fortio
+        kubectl run -it fortio --rm --image=fortio/fortio -- load -qps 800 -t 120s -c 70 "http://goserver-service/healthz"

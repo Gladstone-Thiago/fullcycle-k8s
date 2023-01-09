@@ -16,38 +16,63 @@ spec:
     spec:
       containers:
         - name: goserver
-          image: "gladstonethiago/hello-go:v5.4"
+          image: "wesleywillians/hello-go:v9.6"
+
+          resources:
+            requests: 
+              cpu: "0.05"
+              memory: 20Mi
+            limits:
+              cpu: "0.05"
+              memory: 25Mi
+
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            periodSeconds: 3
+            failureThreshold: 30
+
           readinessProbe:
             httpGet:
               path: /healthz
               port: 8000
             periodSeconds: 3
             failureThreshold: 1
-            initialDelaySeconds: 10
+            # initialDelaySeconds: 10
 
-          # livenessProbe:
-          #   httpGet:
-          #     path: /healthz
-          #     port: 8000
-          #   periodSeconds: 5
-          #   failureThreshold: 3
-          #   timeoutSeconds: 1
-          #   successThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            periodSeconds: 5
+            failureThreshold: 1
+            timeoutSeconds: 1
+            successThreshold: 1
+            # initialDelaySeconds: 15
 
           envFrom:
             - configMapRef:
                 name: goserver-env
             - secretRef:
                 name: goserver-secret
-        
+          
           volumeMounts:
             - mountPath: "/go/myfamily"
               name: config
+              readOnly: true
+            - mountPath: "/go/pvc"
+              name: goserver-volume
 
       volumes:
-        - name: config 
+        - name: goserver-volume
+          persistentVolumeClaim:
+            claimName: goserver-pvc
+
+        - name: config
           configMap:
             name: configmap-family
             items:
-              - key: members
-                path: "family.txt"
+            - key: members
+              path: "family.txt"  
+
